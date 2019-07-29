@@ -20,7 +20,7 @@ import java.util.List;
 
  public class SignUp extends AppCompatActivity implements View.OnClickListener {
      private EditText edtName,edtPunch,edtKick;
-     private Button submit,btnGetAllData;
+     private Button submit,btnGetAllData,btnNextActivity;
      private TextView getData;
      private String allKickBoxers;
 
@@ -34,6 +34,7 @@ import java.util.List;
         submit=findViewById(R.id.submit);
         getData=findViewById(R.id.getData);
         btnGetAllData=findViewById(R.id.btnGetAllData);
+        btnNextActivity = findViewById(R.id.btnNextActivity);
         submit.setOnClickListener(SignUp.this) ;
         getData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,23 +56,32 @@ import java.util.List;
             public void onClick(View v) {
                 allKickBoxers ="";
                 ParseQuery<ParseObject> queryAll = ParseQuery.getQuery("KickBoxer");
+                queryAll.whereGreaterThan("kick",300);
                 queryAll.findInBackground(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> objects, ParseException e) {
                         if(e==null){
                             if(objects.size()>0){
                                 for(ParseObject kickBoxer:objects){
-                                    allKickBoxers=allKickBoxers +"Name:"+ kickBoxer.get("name") + " Punch: "+ kickBoxer.get("punch")+ " Kick: " + kickBoxer.get("kick") + "\n";
+                                    allKickBoxers=allKickBoxers +"Name:"+ kickBoxer.get("name") + "\n";
                                 }
 
                                 FancyToast.makeText(SignUp.this,allKickBoxers,FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
-                            }else{
-                                FancyToast.makeText(SignUp.this,e.getMessage(),FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+                            }
+                            else{
+                                FancyToast.makeText(SignUp.this,"failure",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
 
                             }
                         }
                     }
                 });
+            }
+        });
+
+        btnNextActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -92,7 +102,7 @@ import java.util.List;
                         FancyToast.makeText(SignUp.this, kickboxer.get("name") + "is saved successfully to server", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
                         //Toast.makeText(SignUp.this,kickboxer.get("name")+" is saved successfully to server",Toast.LENGTH_LONG).show();
                     } else {
-                        FancyToast.makeText(SignUp.this, e.getMessage(), FancyToast.LENGTH_LONG, FancyToast.ERROR, true).show();
+                   //     FancyToast.makeText(SignUp.this, e.getMessage(), FancyToast.LENGTH_LONG, FancyToast.ERROR, true).show();
 
 //                    Toast.makeText(SignUp.this,e.getMessage(),Toast.LENGTH_LONG).show();
 
