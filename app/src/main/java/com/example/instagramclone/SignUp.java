@@ -1,6 +1,8 @@
  package com.example.instagramclone;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +38,8 @@ import java.util.List;
         btnGetAllData=findViewById(R.id.btnGetAllData);
         btnNextActivity = findViewById(R.id.btnNextActivity);
         submit.setOnClickListener(SignUp.this) ;
+
+
         getData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,19 +55,24 @@ import java.util.List;
                 });
             }
         });
+
+
         btnGetAllData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 allKickBoxers ="";
                 ParseQuery<ParseObject> queryAll = ParseQuery.getQuery("KickBoxer");
-                queryAll.whereGreaterThan("kick",300);
+//                queryAll.whereGreaterThan("kick",300);
+                queryAll.whereGreaterThanOrEqualTo("kick",300);
+
+//                queryAll.whereContains("name","Naman");
                 queryAll.findInBackground(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> objects, ParseException e) {
                         if(e==null){
                             if(objects.size()>0){
                                 for(ParseObject kickBoxer:objects){
-                                    allKickBoxers=allKickBoxers +"Name:"+ kickBoxer.get("name") + "\n";
+                                    allKickBoxers=allKickBoxers +"Name:"+ kickBoxer.get("name") + " Punch Power: "+ kickBoxer.get("punch")+" Kick Power: "+ "kick"+ "\n";
                                 }
 
                                 FancyToast.makeText(SignUp.this,allKickBoxers,FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
@@ -78,14 +87,19 @@ import java.util.List;
             }
         });
 
+
+
         btnNextActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent=new Intent(SignUp.this,SignUpLogInActivity.class);
+                startActivity(intent);
             }
         });
 
     }
+
+
 
      @Override
      public void onClick(View v) {
